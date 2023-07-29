@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link href="/static/css/admin_dashboard.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="/logout">Logout</a>
+            </li>
+        </ul>
+    </nav>
+    <!-- End Navbar -->
+    {% if users %}
+        {% if current_user.is_admin %}
+            <h1 style='color:#008a6e'>Logged in as Admin: {{ current_user.username }}</h1>
+        {% endif %}
+        <div class="table-responsive">
+            <table class="table table-striped table-bordered">
+                <thead>
+                    <tr>
+                        <th style='background-color:#008a6e; color:white' class="text-center">ID</th>
+                        <th style='background-color:#008a6e; color:white' class="text-center">First Name</th>
+                        <th style='background-color:#008a6e; color:white' class="text-center">Last Name</th>
+                        <th style='background-color:#008a6e; color:white' class="text-center">Email</th>
+                        <th style='background-color:#008a6e; color:white' class="text-center">Username</th>
+                        <th style='background-color:#008a6e; color:white' class="text-center">Gender</th>
+                        <th style='background-color:#008a6e; color:white' class="text-center">Birthdate</th>
+                        <th style='background-color:#008a6e; color:white' class="text-center">Account Type</th>
+                        <th style='background-color:#008a6e; color:white' class="text-center">Tweets</th>
+                        <th style='background-color:#008a6e; color:white' class="text-center">BullyingTweets</th>
+                        <th style='background-color:#008a6e; color:white' class="text-center">Flags</th>
+                        <th style='background-color:#008a6e; color:white' class="text-center">Reports</th>
+                        <th style='background-color:#008a6e; color:white' class="text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr {% if user.is_admin %}class="admin-row"{% endif %}>
+                            <td>{{ user.id }}</td>
+                            <td>{{ user.firstname }}</td>
+                            <td>{{ user.lastname }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>{{ user.username }}</td>
+                            <td>{{ user.gender }}</td>
+                            <td>{{ user.birthdate }}</td>
+                            {% if user.is_blocked %}
+                                <td><span style="color:red; font-weight:bold">Blocked</span></td>
+                            {% else %}
+                                {% if user.is_admin %}
+                                    <td><span class="admin" >Admin</span></td>
+                                {% else %}
+                                    <td><span style="color:black; font-weight:bold">User</span></td>
+                                {% endif %}
+                            {% endif %}
+                            <td>
+                                {% if user.tweets %}
+                                    <ul>
+                                        {% for tweet in user.tweets %}
+                                            <li>{{ tweet.text }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                {% else %}
+                                    {% if user.is_admin %}
+                                        is Admin
+                                    {% else %}
+                                        No Tweet Found!
+                                    {% endif %}
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if user.bullying_messages %}
+                                    <ul>
+                                        {% for bullying_message in user.bullying_messages %}
+                                            <li>{{ bullying_message.text }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                {% else %}
+                                    {% if user.is_admin %}
+                                        is Admin
+                                    {% else %}
+                                        No Bullying Message Found!
+                                    {% endif %}
+                                {% endif %}
+                            </td>
+                            <td>
+                                {{ user.bullying_messages|length }}           
+                            </td>
+                            <td>
+                                {% if user.reports %}
+                                    <ul>
+                                        {% for report in user.reports %}
+                                            <li>{{ report.reason }} (Reported on: {{ report.tweet.user.username }})</li>
+                                        {% endfor %}
+                                    </ul>
+                                {% else %}
+                                    {% if user.is_admin %}
+                                        is Admin
+                                    {% else %}
+                                        No Reports Found!
+                                    {% endif %}
+                                {% endif %}
+                            </td>
+                            
+                            <td>
+                                {% if user.is_admin %}
+                                    &nbsp;
+                                {% else %}
+                                    {% if user.is_blocked %}
+                                        <form action="/unblock_user" method="POST">
+                                            <input type="hidden" name="username" value="{{ user.username }}">
+                                            <button type="submit" class="btn btn-success btn-sm">Unblock</button>
+                                        </form>
+                                    {% else %}
+                                        {% if user.bullying_messages|length > 0 %}
+                                            
+                                            <form action="/block_user" method="POST">
+                                                <input type="hidden" name="username" value="{{ user.username }}">
+                                                <button type="submit" class="btn btn-danger btn-sm" >Block</button>
+                                            </form>
+                                        {% endif %}
+                                    {% endif %}
+                                {% endif %}
+                            </td>           
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+
+    <!-- Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"></script>
+        <script>
+            jQuery(function()
+            {
+                jQuery('#modal').click();
+            });
+        </script>
+</body>
+</html>

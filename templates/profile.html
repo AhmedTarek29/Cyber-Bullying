@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pegasus</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/profile.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav id="navBar"class="navbar navbar-expand-lg navbar-light ">
+        <a class="navbar-brand" href="/homepage">Pegasus</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/editprofile" >Edit Profile</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout">Logout</a>
+                </li>  
+            </ul>
+        </div>
+    </nav><!-- End Navbar -->
+    {% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <img src="{% if current_user.photo %}{{ url_for('static', filename='photo/' + current_user.photo) }}{% else %}{{ url_for('static', filename='photo/male.png') }}{% endif %}" alt="Profile Photo" class="profile-photo">
+                <div class="profile-actions">
+                    <a href="{{ url_for('friends') }}" class="btn btn-secondary">{{ current_user.get_friends_count() }} Friends</a>
+                    <ul class="dropdown-menu" aria-labelledby="friends-dropdown">
+                        <li><a class="dropdown-item" href="{{ url_for('friends') }}">View Friends List</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <h1>{{ user.username }}'s Profile</h1>
+                <p>First Name: {{ user.firstname }}</p>
+                <p>Last Name: {{ user.lastname }}</p>
+                <p>Email: {{ user.email }}</p>
+                <p>Gender: {{ user.gender }}</p>
+                <p>Birthdate: {{ user.birthdate }}</p>
+                {% if user.tweets %}
+                <div class="tweets-section">
+                    <h2>Tweets:</h2>
+                    {% for tweet in user.tweets %}
+                    <div class="card tweet-card">
+                        <div class="card-body">
+                            <img src="{% if current_user.photo %}{{ url_for('static', filename='photo/' + current_user.photo) }}{% else %}{{ url_for('static', filename='photo/male.png') }}{% endif %}" alt="Profile Photo" style="border-radius: 50%; width: 50px; height: 50px; margin-right: 5px;">
+                            <h5 class="card-title">{{ tweet.user.username }}</h5>
+                            <p class="card-text">{{ tweet.text }}</p>
+                            <a href="/delete/{{ tweet.id }}" class="btn btn-danger">Delete</a>
+                            <small>Posted on {{ tweet.timestamp.strftime('%m/%d/%Y %I:%M %p') }}</small>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+</body>
+</html>

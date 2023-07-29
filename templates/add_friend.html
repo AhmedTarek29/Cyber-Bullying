@@ -1,0 +1,32 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pegasus</title>
+    <!-- Bootstrap CSS -->
+    <link href="  static/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/addfriend.css"rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light ">
+    <a class="navbar-brand1" href="/homepage" >Pegasus</a>
+  </nav>
+  <!-- End Navbar -->
+  {% block content %}
+    <div class="add-container">
+      <h1>Add Friend</h1>
+        {% if error %}
+          <p class="error" style="color:red;">{{ error }}</p>
+        {% endif %}
+        <form class="add-form" method="post">
+          <input type="text"id="username" name="username"placeholder="Enter username" class="add-input">
+          <input type="submit" class="add-button"value="Add">
+        </form>
+    </div>
+  {% endblock %}
+</body>
+</html>

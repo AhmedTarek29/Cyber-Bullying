@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link href="/static/css/view_tweets.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">    
+</head>
+<body>
+  {% block content %}
+  <h1>{{ user.username }}'s Tweets</h1>
+  
+  {% if tweets %}
+      {% for i, tweet in enumerate(tweets) %}
+          <div class="card my-3">
+              <div class="card-body">
+                  <h5 class="card-title">{{ tweet.user.username }}</h5>
+                  <p class="card-text">{{ tweet.text }}</p>
+                  <p class="card-text"><small class="text-muted">{{ tweet.timestamp }}</small></p>
+                  <div class="tweet">
+                      <button class="like-button">Like</button>
+                      <span class="like-count">0</span>
+                  </div>
+                  <div class="dropdown" style="display:inline-block;">
+                      <button class="btn btn-secondary dropdown-toggle" type="button" id="reportDropdown{{ i }}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          Report
+                      </button>
+                      <div class="dropdown-menu" aria-labelledby="reportDropdown{{ i }}">
+                          <form action="/report_tweet" method="POST" class="px-4 py-3">
+                              <input type="hidden" name="tweet_id" value="{{ tweet.id }}">
+                              <div class="form-group">
+                                  <label for="reportReason">Reason:</label>
+                                  <textarea class="form-control" name="report_reason" rows="3" required></textarea>
+                              </div>
+                              <button type="submit" class="btn btn-primary">Submit</button>
+                          </form>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      {% endfor %}
+  {% else %}
+      <p>{{ user.username }} has not tweeted yet.</p>
+  {% endif %}
+{% endblock %}
+<script>
+  // Get all the like buttons
+  const likeButtons = document.querySelectorAll('.like-button');
+
+  // Add event listeners to each like button
+  likeButtons.forEach(button => {
+    button.addEventListener('click', function() {
+      const tweet = this.parentElement;
+      const likeCount = tweet.querySelector('.like-count');
+      
+      // Check if the tweet is already liked
+      const isLiked = this.classList.contains('liked');
+
+      if (isLiked) {
+        // If already liked, remove the like
+        this.classList.remove('liked');
+        this.innerText = 'Like';
+        let count = parseInt(likeCount.innerText);
+        count--;
+        likeCount.innerText = count;
+      } else {
+        // If not liked, add the like
+        this.classList.add('liked');
+        this.innerText = 'Unlike';
+        let count = parseInt(likeCount.innerText);
+        count++;
+        likeCount.innerText = count;
+      }
+    });
+  });
+</script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZU1bK+4nb6a5RWbB6E5EJo/5/iS48gM6j5g6H5Hz4x4l+" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-U7rrgJDE/iTt8d6Q5t6X4ftxIl8gpo8r+gZT7jvOy+0R/+SM6XiET8qlnzvOrZ7N" crossorigin="anonymous"></script>
+  
+</body>
+</html>

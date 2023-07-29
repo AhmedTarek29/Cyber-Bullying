@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pegasus</title>
+    <!-- Bootstrap CSS -->
+    <link href="  static/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/search.css"rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <style>
+    .card {
+      margin-top: 20px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      }
+      
+      .results-heading {
+      margin-top: 20px;
+      }
+      
+      .results-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      }
+      
+      .result-item {
+      margin-bottom: 10px;
+      font-weight: bold;
+      font-size: 1.9rem;
+      }
+      
+      .view-tweets-link {
+      font-weight: bold;
+      font-size: 1.2rem;
+      }
+      .badge {
+          font-size: 18px;
+          color: rgb(255, 255, 255);
+          background-color: #e11d48;
+          padding: 5px 10px;
+      }
+      .badge-blocked {
+          background-color: red;
+          color: rgb(255, 255, 255);
+          padding: 5px 10px;
+      }
+      .friend {
+          border-bottom: 1px solid black;
+          padding-bottom: 10px;
+          margin-bottom: 10px;
+      }
+      .friend:last-child {
+          border-bottom: none;
+          padding-bottom: 0;
+          margin-bottom: 0;
+      }
+      .view-tweets-link {
+          margin-top: 5px;
+          display: block;
+      }
+      .badge-success {
+          color: white;
+          background-color: #16a34a;
+      }
+  </style>
+</head>
+<body>
+    <!-- Navbar -->
+      <nav class="navbar navbar-expand-lg navbar-light ">
+        <a class="navbar-brand1" href="/homepage" >Pegasus</a>
+      </nav>
+      <!-- End Navbar -->
+  {% block content %}
+  <div class="search-container">
+    <h1>Search Friends</h1>
+    <form class="search-form" method="post">
+      <input type="text" name="search_query" placeholder="Enter username" class="search-input">
+      <button type="submit" class="search-button">Search</button>
+    </form>
+    
+    
+    {% for friend in friend_data %}
+        <div class="friend">
+            <h3>{{ friend.user.username }}</h3>
+            <span  class="badge {% if friend.bullying_messages_count > 0 %}badge-danger{% else %}badge-success{% endif %}">{{ friend.bullying_messages_count }} Spam</span>
+            {% if friend.user.is_blocked %}
+            <span class="badge badge-blocked">Blocked</span>
+            {% endif %}
+            <a href="{{ url_for('view_tweets', user_id=friend.user.id) }}" class="view-tweets-link">View Tweets</a>
+        </div>
+        {% endfor %}
+  </div>
+{% endblock %}
+</body>
+</html>

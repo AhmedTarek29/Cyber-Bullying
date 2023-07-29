@@ -1,0 +1,13 @@
+
+{% block content %}
+    <h1>Upload Profile Photo</h1>
+    <form method="POST" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+            {{ form.photo.label }}
+            {{ form.photo(class="form-control-file") }}
+        </div>
+        <hr>
+        <button type="submit" class="btn btn-primary">Upload Photo</button>
+    </form>
+{% endblock %}

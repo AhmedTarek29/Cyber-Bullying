@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pegasus</title>
+    <!-- Bootstrap CSS -->
+    <link href="  static/css/editProfile.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body style="background-image: url('static/photo/1.Jpg');background-size: cover;">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light ">
+        <a class="navbar-brand1" href="/homepage" >Pegasus</a>
+    </nav>
+    <!-- End Navbar -->
+
+    <h2>Edit Profile</h2>
+    {% block content %}
+    <form method="POST" class="edit-profile-form">
+    {{ form.hidden_tag() }}
+    <div class="form-group">
+        {{ form.firstname.label }}
+        {{ form.firstname(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.lastname.label }}
+        {{ form.lastname(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.username.label }}
+        {{ form.username(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.email.label }}
+        {{ form.email(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.gender.label }}
+        {{ form.gender(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.photo.label }} {{ form.photo(class="form-control-file") }}
+    </div>
+    <div class="form-group">
+        {{ form.old_password.label }}
+        {{ form.old_password(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.new_password.label }}
+        {{ form.new_password(class="form-control") }}
+    </div>
+    <div class="form-group">
+        {{ form.confirm_new_password.label }}
+        {{ form.confirm_new_password(class="form-control") }}
+    </div>
+    
+    <hr>        
+    <input  type="submit" value="Save Change">
+</form>
+{% endblock %}
+</body>
+</html>

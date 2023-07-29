@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Signup</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>PEGASUS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="/static/css/signup.css" rel="stylesheet">
+
+</head>
+<body style="background-image: url('static/photo/1.Jpg');background-size: cover;">
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul class=flashes style='color: #008a6e; font-weight: bold;'>
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+    <form  method="POST" action="{{ url_for('signup') }}">
+        <h1 >SignUp</h1>
+
+        <label for="firstname">First Name</label>
+        <input type="text" id="firstname" placeholder="First Name"  name="firstname" required>
+        
+        <label for="lastname">Last Name</label>
+        <input type="text" id="lastname" placeholder="Last Name" name="lastname" required>
+        
+        <label for="username">Username</label>
+        <input type="text" id="username" placeholder="User Name" name="username" required>
+        
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="Email" name="email" required>
+        
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="Password" name="password" required>
+        
+        <label for="confirmpassword">Confirm Password</label>
+        <input type="password" id="confirmpassword" placeholder="Confirm Password" name="confirmpassword" required>
+        
+        <label for="gender">Gender</label>
+        <select id="gender" name="gender">
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+        </select>
+        
+        <label for="birthdate">Birthdate</label>
+        <input type="date" id="birthdate" name="birthdate" required>
+        
+        <input  type="submit" value="Sign Up">
+        
+        <footer class="form-footer">
+            <h3>Already have an account? <a  href="{{ url_for('login') }}">Login Now</a></h3>
+        </footer>
+    </form>
+</body>
+</html>
